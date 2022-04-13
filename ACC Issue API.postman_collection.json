@@ -1,0 +1,1702 @@
+{
+	"info": {
+		"_postman_id": "7fd8a3f7-0440-4591-b117-5158fd091d4c",
+		"name": "ACC Issue API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Run First",
+			"item": [
+				{
+					"name": "01-GET One Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get account collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var account_name = pm.environment.get(\"account_name\") ",
+									"",
+									"pm.test(\"find matches account by id: \" + account_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == account_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){ ",
+									"        pm.environment.set(\"account_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs"
+							]
+						},
+						"description": "GET all hubs of your account, and get one hub. Please provide the hub name (hub_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "02-GET One Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get project collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var project_name = pm.environment.get(\"project_name\") ",
+									"pm.test(\"find matches project by name: \" + project_name, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.data.find(d=>d.attributes.name == project_name)",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){ ",
+									"        pm.environment.set(\"project_id_without_b\", find.id.split(\"b.\").join(\"\"));",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/project/v1/hubs/b.{{account_id_without_b}}/projects",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"project",
+								"v1",
+								"hubs",
+								"b.{{account_id_without_b}}",
+								"projects"
+							]
+						},
+						"description": "GET all projects of one hub, and get one project Please provide the hub name (project_name) in environment variables"
+					},
+					"response": []
+				},
+				{
+					"name": "03-[!!GAP!!] Get One Project User Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "NO Endpoint for ACC yet to get project members",
+							"host": [
+								"NO Endpoint for ACC yet to get project members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03-[backup]Authentication 2-legged token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"access_token\", data.access_token); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "account:read data:read",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_domain}}/authentication/v1/authenticate",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"authentication",
+								"v1",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03-[Workaround-2LO] Get One Account User Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get account users, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var one_user_email = pm.environment.get(\"one_user_email_as_assignee\");",
+									"",
+									"pm.test(\"find one user id by email: \" + one_user_email, function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.find(d=>d.email==one_user_email)  ",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    pm.environment.set(\"assignee_id\", find.uid); ",
+									"    ",
+									"});",
+									"",
+									"  "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/hq/v1/accounts/:account_id/users",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"hq",
+								"v1",
+								"accounts",
+								":account_id",
+								"users"
+							],
+							"variable": [
+								{
+									"key": "account_id",
+									"value": "{{account_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04-GET One Location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get locations collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" ",
+									"pm.test(\"get one location id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    pm.expect(body.results).not.eq(undefined); ",
+									"",
+									"    ",
+									"    //the first location ",
+									"    pm.environment.set(\"one_location_id\", body.results[1].id);",
+									"     ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/construction/locations/v2/projects/:projectId/trees/default/nodes",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"locations",
+								"v2",
+								"projects",
+								":projectId",
+								"trees",
+								"default",
+								"nodes"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "<input a limit in 2-200>",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "5",
+									"description": "<input a offset in 2-200>",
+									"disabled": true
+								},
+								{
+									"key": "filter[isActive]",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdBy]",
+									"value": "System",
+									"description": "user id. 'System' is the default system",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdAt]",
+									"value": "2021-03-04...",
+									"description": "ISO 8601 time",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API References",
+			"item": [
+				{
+					"name": "User @ Me",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get User@Me, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"}); ",
+									"",
+									"pm.test(\"get user id \", function () {",
+									"    var body = JSON.parse(responseBody);  ",
+									"    pm.expect(body).not.eq(undefined); ",
+									"    pm.environment.set(\"creator_id\", body.id); ",
+									"    ",
+									"});  "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}",
+								"disabled": true
+							},
+							{
+								"key": "userId",
+								"value": "200902260532621",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/users/me",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"users",
+								"me"
+							],
+							"query": [
+								{
+									"key": "page[limit]",
+									"value": "200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Issues Types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get issue types collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" ",
+									"pm.test(\"get one issue sub type id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    //the first issue type that contains sub types",
+									"    var find = body.results.find(i=>i.subtypes.length>0)",
+									"    pm.environment.set(\"one_issue_type_id\", find.id);",
+									"    if(find){",
+									"        pm.environment.set(\"one_sub_issue_type_id\", find.subtypes[0].id); ",
+									"",
+									"    }else{",
+									"        pm.environment.set(\"one_sub_issue_type_id\", \"\"); ",
+									"    } ",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issue-types?include=subtypes&filter[title]=xiaodong-type-category",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issue-types"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "subtypes"
+								},
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "<input a limit in 2-200>",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "5",
+									"description": "<input a offset in 2-200>",
+									"disabled": true
+								},
+								{
+									"key": "filter[isActive]",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdBy]",
+									"value": "System",
+									"description": "user id. 'System' is the default system",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdAt]",
+									"value": "2021-03-04...",
+									"description": "ISO 8601 time",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "xiaodong-type-category",
+									"description": "search by title"
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET issue-attribute-definitions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get custom attributes definitions, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Get custom definitions ids: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.results",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"    ",
+									"    if(find){",
+									"        //get all ids of custom attributes definitions",
+									"        //assume at least 3 custom attributes types are available: text, date, dropdown",
+									"        var text_custom_attribute_id = find.find(i=>i.dataType == \"text\").id",
+									"        var dropdown_custom_attribute_id = find.find(i=>i.dataType == \"list\").id ",
+									"        var one_dropdown_value = find.find(i=>i.dataType == \"list\").metadata.list.options[0].id;",
+									"",
+									"        pm.environment.set(\"text_custom_attribute_id\", text_custom_attribute_id); ",
+									"       ",
+									"        pm.environment.set(\"dropdown_custom_attribute_id\", dropdown_custom_attribute_id); ",
+									"        pm.environment.set(\"one_dropdown_value\", one_dropdown_value); ",
+									"",
+									"    }else{",
+									"        ",
+									"    }",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issue-attribute-definitions",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issue-attribute-definitions"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "input a limit in 2-200",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "5",
+									"description": "input a offset in 1-200",
+									"disabled": true
+								},
+								{
+									"key": "filter[dataType]",
+									"value": "text",
+									"description": "available: numeric,text,paragraph,list",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdBy]",
+									"value": "200902260532621",
+									"description": "user id",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdAt]",
+									"value": "2022-03-08...",
+									"description": "ISO 8601 time",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "numeric-demo",
+									"description": "search by title",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET issue-attribute-mappings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issue-attribute-mappings",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issue-attribute-mappings"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "input a limit in 2-200",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "5",
+									"description": "input a offset in 1-200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET issue-root-cause-categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get root causes collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" ",
+									"pm.test(\"get one root cause id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"",
+									"    //the first root cause category that contains root  cause",
+									"    var find = body.results.find(i=>i.rootCauses.length>0)",
+									"    pm.environment.set(\"one_root_cause_category_id\", find.id);",
+									"    if(find){",
+									"        pm.environment.set(\"one_root_cause_id\", find.rootCauses[0].id); ",
+									"",
+									"    }else{",
+									"        pm.environment.set(\"one_root_cause_id\", \"\"); ",
+									"    } ",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issue-root-cause-categories?include=rootcauses",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issue-root-cause-categories"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "input a limit in 2-200",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "5",
+									"description": "input a offset in 1-200",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdBy]",
+									"value": "System",
+									"description": "user id. 'System' is the id of default",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdAt]",
+									"value": "2022-03-08...",
+									"description": "ISO 8601 time",
+									"disabled": true
+								},
+								{
+									"key": "filter[title]",
+									"value": "Design",
+									"description": "search by title",
+									"disabled": true
+								},
+								{
+									"key": "include",
+									"value": "rootcauses"
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Issues",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get issues collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" ",
+									"pm.test(\"get one issue id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    if(body.results && body.results.length>0)",
+									"    pm.environment.set(\"one_issue_id\", body.results[0].id); ",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "input a limit in 2-200",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "5",
+									"description": "<input a offset in 2-200>",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdBy]",
+									"value": "H525MUVW4AAB",
+									"description": "user Id",
+									"disabled": true
+								},
+								{
+									"key": "filter[dueDate]",
+									"value": "2022-01-14...",
+									"description": "ISO8601. Three dots with date range",
+									"disabled": true
+								},
+								{
+									"key": "filter[deleted]",
+									"value": "false",
+									"disabled": true
+								},
+								{
+									"key": "filter[createdAt]",
+									"value": "2022-01-14...",
+									"description": "ISO8601",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET One Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get issues collection, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" ",
+									"pm.test(\"get one issue id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    if(body.results && body.results.length>0)",
+									"    pm.environment.set(\"one_issue_id\", body.results[0].id); ",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues/:issueId",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues",
+								":issueId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "issueId",
+									"value": "{{one_issue_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Issue-Basic",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var d = new Date()",
+									"var current_date_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2)",
+									"pm.environment.set(\"current_date_time\", current_date_time);",
+									"",
+									"d.setUTCMinutes(d.getUTCDay()+10) //set due date  ",
+									"",
+									"var due_date = d.getUTCFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2)  ",
+									"pm.environment.set(\"due_date\", due_date);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"create issues, Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									" ",
+									"pm.test(\"get one issue id: \", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    pm.environment.set(\"one_issue_id\", body.id); ",
+									"    ",
+									"});",
+									"",
+									"     "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"title\": \"[{{current_date_time}}]create issue by API- assign to one user\",\n        \"description\": \"create issue by {{creator_id}}- assign to one user{{assignee_id}}\",\n        \"status\": \"open\",\n        \"assignedTo\": \"{{assignee_id}}\",\n        \"assignedToType\": \"user\",\n        \"dueDate\": \"{{due_date}}\",\n        \"issueSubtypeId\":\"{{one_sub_issue_type_id}}\", \n        \"rootCauseId\":\"{{one_root_cause_id}}\",\n        \"locationId\":\"{{one_location_id}}\"\n\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues"
+							],
+							"query": [
+								{
+									"key": "page[limit]",
+									"value": "200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Issue-with Custom Attribute",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"create issues with custom attribute, Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"title\": \"[{{current_date_time}}]create issue by API- assign to one user\",\n        \"description\": \"create issue by API- assign to one user\",\n        \"status\": \"open\",\n        \"assignedTo\": \"{{assignee_id}}\",\n        \"assignedToType\": \"user\",\n        \"dueDate\": \"{{due_date}}\",\n        \"issueSubtypeId\":\"{{one_sub_issue_type_id}}\",\n        \"rootCauseId\":\"{{one_root_cause_id}}\",\n        \"locationId\":\"{{one_location_id}}\",\n\n\n        \"customAttributes\": [\n          {\n            \"attributeDefinitionId\": \"{{text_custom_attribute_id}}\",\n            \"value\": \"demo values of custom attribute\"\n          },\n          {\n            \"attributeDefinitionId\": \"{{dropdown_custom_attribute_id}}\",\n            \"value\": \"{{one_dropdown_value}}\"\n          } \n        ]\n}\n "
+						},
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Issue-Basic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Patch one issue. Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var d = new Date()",
+									"var current_date_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2)",
+									"pm.environment.set(\"current_date_time\", current_date_time);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"title\": \"Patch issue by {{creator_id}} at {{current_date_time}}\",\n        \"description\": \"patch one issue by {{creator_id}} at {{current_date_time}}\",\n        \"status\": \"closed\"\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues/:issueId",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues",
+								":issueId"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "issueId",
+									"value": "{{one_issue_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Issue-with Custom Attributes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Patch one issue with custom attributes. Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var d = new Date()",
+									"var current_date_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2)",
+									"pm.environment.set(\"current_date_time\", current_date_time);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n       \"title\": \"Patch issue by {{creator_id}} at {{current_date_time}} with custom attributes\",\n        \"description\": \"patch one issue by {{creator_id}} at {{current_date_time}} with custom attributes\",\n        \"status\": \"closed\",\n        \"customAttributes\": [\n          {\n            \"attributeDefinitionId\": \"{{one_text_custom_attribute_id}}\",\n            \"value\": \"patch issue: demo values of custom attribute\"\n          },\n          {\n            \"attributeDefinitionId\": \"{{one_dropdown_custom_attribute_id}}\",\n            \"value\": \"\"\n          }\n        ]\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues/:issueId",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues",
+								":issueId"
+							],
+							"query": [
+								{
+									"key": "page[limit]",
+									"value": "200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "9563e750-18ed-43f7-a415-bf17d5d0051d"
+								},
+								{
+									"key": "issueId",
+									"value": "d0cdcd31-6dcb-458e-b12b-5929a9fed2a8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Issue-with Published",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Patch one issue with custom attributes. Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var d = new Date()",
+									"var current_date_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2)",
+									"pm.environment.set(\"current_date_time\", current_date_time);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/vnd.api+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n       \"title\": \"Patch issue by {{creator_id}} at {{current_date_time}} with published\",\n        \"description\": \"patch one issue by {{creator_id}} at {{current_date_time}} with published\",\n        \"published\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues/:issueId",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues",
+								":issueId"
+							],
+							"query": [
+								{
+									"key": "page[limit]",
+									"value": "200",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "9563e750-18ed-43f7-a415-bf17d5d0051d"
+								},
+								{
+									"key": "issueId",
+									"value": "{{one_issue_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Comments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"get one issue comments collection. Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues/:issueId/comments",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues",
+								":issueId",
+								"comments"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "issueId",
+									"value": "{{one_issue_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"create comment for one issue. Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var d = new Date()",
+									"var current_date_time = d.getFullYear() ",
+									"                +\"-\" + ((\"0\" + (d.getUTCMonth()+1)).slice(-2) )",
+									"                + \"-\" +  (\"0\" + d.getUTCDate()).slice(-2)",
+									"pm.environment.set(\"current_date_time\", current_date_time);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"issueId\": \"{{one_issue_id}}\",\n        \"body\": \"This is a comment created by API by {{creator_id}} at {{current_date_time}}.\"\n }"
+						},
+						"url": {
+							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues/:issueId/comments",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"issues",
+								"v1",
+								"projects",
+								":projectId",
+								"issues",
+								":issueId",
+								"comments"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								},
+								{
+									"key": "issueId",
+									"value": "{{one_issue_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Additional Test",
+			"item": [
+				{
+					"name": "Search Relationship of Issues and Photos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Search Relationship with Domain and Type - Asset, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"relationships is not null\", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.relationships;",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"     ",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/bim360/relationship/v2/containers/{{project_id_without_b}}/relationships:search?domain=autodesk-bim360-issue&type=issue&id={{one_issue_id}}&withDomain=autodesk-construction-photo&withType=photo",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"relationship",
+								"v2",
+								"containers",
+								"{{project_id_without_b}}",
+								"relationships:search"
+							],
+							"query": [
+								{
+									"key": "domain",
+									"value": "autodesk-bim360-issue"
+								},
+								{
+									"key": "type",
+									"value": "issue"
+								},
+								{
+									"key": "id",
+									"value": "{{one_issue_id}}"
+								},
+								{
+									"key": "withDomain",
+									"value": "autodesk-construction-photo"
+								},
+								{
+									"key": "withType",
+									"value": "photo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Reference of Issue with Photo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Search Relationship with Domain and Type - Asset, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"relationships is not null\", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.relationships;",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"     ",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/bim360/relationship/v2/containers/{{project_id_without_b}}/relationships:search?domain=autodesk-bim360-issue&type=issue&id={{one_issue_id}}&withDomain=autodesk-construction-photo&withType=photo",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"relationship",
+								"v2",
+								"containers",
+								"{{project_id_without_b}}",
+								"relationships:search"
+							],
+							"query": [
+								{
+									"key": "domain",
+									"value": "autodesk-bim360-issue"
+								},
+								{
+									"key": "type",
+									"value": "issue"
+								},
+								{
+									"key": "id",
+									"value": "{{one_issue_id}}"
+								},
+								{
+									"key": "withDomain",
+									"value": "autodesk-construction-photo"
+								},
+								{
+									"key": "withType",
+									"value": "photo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Supported Relationships to Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_domain}}/bim360/relationship/v2/utility/relationships:writable",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"relationship",
+								"v2",
+								"utility",
+								"relationships:writable"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "scope",
+				"value": "data:read data:write",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{client_secret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{client_id}}",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v1/gettoken",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://developer.api.autodesk.com/authentication/v1/authorize",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://www.getpostman.com/oauth2/callback",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "access_token",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
