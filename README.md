@@ -36,7 +36,16 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
 4. Follow the [product help document](https://construction.autodesk.com/tools/issues-software/) of ACC to create some issues.
 
-5.  Clone this repository or download it. It's recommended to install [GitHub Desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
+5. Create some custom attributes definitions with all types: text, dropdown, numeric and paragraph. This is to test creating/patching issue with custom attributes.
+
+   <p align="center"><img src="./help/custom-attribute.png" width="300" ></p>   
+
+6. Upload some photos in Photo module. This is to test creating reference with Photo.
+
+   <p align="center"><img src="./help/photos.png" width="300" ></p>   
+
+
+7.  Clone this repository or download it. It's recommended to install [GitHub Desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
 
     ```git clone https://github.com/Autodesk-Forge/forge-autodesk.docs.issue.api-postman.collection```
 
@@ -73,14 +82,17 @@ Issue API requires to work with 3-legged token. This collection takes **[Inherit
    Next call _04-GET One Location_ to get one location id (for testing issue creation)
 
 
-3. Run the endpoints in **API References**. Follow [API documents](https://forge.autodesk.com/en/docs/acc/v1/reference/http/issues-users-me-GET/) to verify if the APIs work well. Try to change the parameters in various scenarios to see how it goes. Check UI if it works well with API (such as creating/patching new issue,creating new comments etc. )
+3. Run the endpoints in **API References**. Follow [API documents](https://forge.autodesk.com/en/docs/acc/v1/reference/http/issues-users-me-GET/) to verify if the APIs work well. Try to change the parameters in various scenarios to see how it goes. Check UI if it works well with API (such as creating/patching new issue, creating new comments etc. )
     
     <p align="center"><img src="./help/collection.png" width="400" ></p>   
 
-4. To work with **Issue>>References**, [Relationship API](https://forge.autodesk.com/en/docs/acc/v1/reference/http/relationship-service-v2-search-relationships-GET/) is required. This sample Postman collection provides a few endpoins. 
+4. To work with **Issue>>References**, [Relationship API](https://forge.autodesk.com/en/docs/acc/v1/reference/http/relationship-service-v2-search-relationships-GET/) is required. This sample Postman collection provides a few endpoints. 
 
-    Search Relationship of Issues and Photos: It assumes id of one issue is available. The endpoint will return all photos that have been attached with this issue. 
-
+    *  01-Get id of one photo: call [Photo API](https://forge.autodesk.com/en/docs/acc/v1/reference/http/photos-getfilteredphotos-POST/) to get one photo id
+    * 02-Add Reference of Issue with Photo: add reference between one issue (from previous test scripts in #3) and one photo
+    * 03-Search Relationship of Issues and Photos: get all referenced photos of one issue
+    * 04-Supported Relationships to Create: get all relationships that can be created. Check those which are related with issue. Add more test scripts to create/get relationships of other types of references (document, rfi, asset etc.) 
+    
 **Blogs**:
 - [Forge Blog](https://forge.autodesk.com)
 - [Field of View](https://fieldofviewblog.wordpress.com/), a BIM focused blog
@@ -91,4 +103,4 @@ This sample is licensed under the terms of the [MIT License](http://opensource.o
 
 ## Written by
 
-Xiaodong Liang [@coldwood](https://twitter.com/coldwood), [Developer Advacate and Support team](http://forge.autodesk.com)
+Xiaodong Liang [@coldwood](https://twitter.com/coldwood), [Developer Advocate and Support team](http://forge.autodesk.com)

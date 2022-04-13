@@ -1222,7 +1222,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n       \"title\": \"Patch issue by {{creator_id}} at {{current_date_time}} with custom attributes\",\n        \"description\": \"patch one issue by {{creator_id}} at {{current_date_time}} with custom attributes\",\n        \"status\": \"closed\",\n        \"customAttributes\": [\n          {\n            \"attributeDefinitionId\": \"{{one_text_custom_attribute_id}}\",\n            \"value\": \"patch issue: demo values of custom attribute\"\n          },\n          {\n            \"attributeDefinitionId\": \"{{one_dropdown_custom_attribute_id}}\",\n            \"value\": \"\"\n          }\n        ]\n}"
+							"raw": "{\n       \"title\": \"Patch issue by {{creator_id}} at {{current_date_time}} with custom attributes\",\n        \"description\": \"patch one issue by {{creator_id}} at {{current_date_time}} with custom attributes\",\n        \"status\": \"closed\",\n        \"customAttributes\": [\n          {\n            \"attributeDefinitionId\": \"{{text_custom_attribute_id}}\",\n            \"value\": \"patch issue: demo values of custom attribute\"\n          },\n          {\n            \"attributeDefinitionId\": \"{{dropdown_custom_attribute_id}}\",\n            \"value\": \"{{one_dropdown_value}}\"\n          }\n        ]\n}"
 						},
 						"url": {
 							"raw": "{{base_domain}}/construction/issues/v1/projects/:projectId/issues/:issueId",
@@ -1461,7 +1461,124 @@
 			"name": "Additional Test",
 			"item": [
 				{
-					"name": "Search Relationship of Issues and Photos",
+					"name": "01-Get One Photo Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get One Photo Id, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Photos collection is not null\", function () {",
+									"    var body = JSON.parse(responseBody);",
+									"    var find = body.results;",
+									"",
+									"    pm.expect(find).not.eq(undefined); ",
+									"",
+									"     if(find && find.length>0)",
+									"        pm.environment.set(\"one_photo_id\",find[0].id); ",
+									"     ",
+									"    ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_domain}}/construction/photos/v1/projects/:projectId/photos:filter",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"construction",
+								"photos",
+								"v1",
+								"projects",
+								":projectId",
+								"photos:filter"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02-Add Reference of Issue with Photo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Add Reference of Issue with Photo, Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									" "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n           {\n             \"entities\": [\n               {\n                 \"domain\": \"autodesk-bim360-issue\",\n                 \"type\": \"issue\",\n                 \"id\": \"{{one_issue_id}}\"\n               },\n               {\n                 \"domain\": \"autodesk-construction-photo\",\n                 \"type\": \"photo\",\n                 \"id\": \"{{one_photo_id}}\" \n               }\n             ]\n           }\n         ]"
+						},
+						"url": {
+							"raw": "{{base_domain}}/bim360/relationship/v2/containers/:containerId/relationships",
+							"host": [
+								"{{base_domain}}"
+							],
+							"path": [
+								"bim360",
+								"relationship",
+								"v2",
+								"containers",
+								":containerId",
+								"relationships"
+							],
+							"variable": [
+								{
+									"key": "containerId",
+									"value": "{{project_id_without_b}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03-Search Relationship of Issues and Photos",
 					"event": [
 						{
 							"listen": "test",
@@ -1489,7 +1606,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_domain}}/bim360/relationship/v2/containers/{{project_id_without_b}}/relationships:search?domain=autodesk-bim360-issue&type=issue&id={{one_issue_id}}&withDomain=autodesk-construction-photo&withType=photo",
+							"raw": "{{base_domain}}/bim360/relationship/v2/containers/:projectId/relationships:search?domain=autodesk-bim360-issue&type=issue&id={{one_issue_id}}&withDomain=autodesk-construction-photo&withType=photo",
 							"host": [
 								"{{base_domain}}"
 							],
@@ -1498,7 +1615,7 @@
 								"relationship",
 								"v2",
 								"containers",
-								"{{project_id_without_b}}",
+								":projectId",
 								"relationships:search"
 							],
 							"query": [
@@ -1522,72 +1639,11 @@
 									"key": "withType",
 									"value": "photo"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Reference of Issue with Photo",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Search Relationship with Domain and Type - Asset, Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"",
-									"pm.test(\"relationships is not null\", function () {",
-									"    var body = JSON.parse(responseBody);",
-									"    var find = body.relationships;",
-									"",
-									"    pm.expect(find).not.eq(undefined); ",
-									"     ",
-									"    ",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{base_domain}}/bim360/relationship/v2/containers/{{project_id_without_b}}/relationships:search?domain=autodesk-bim360-issue&type=issue&id={{one_issue_id}}&withDomain=autodesk-construction-photo&withType=photo",
-							"host": [
-								"{{base_domain}}"
 							],
-							"path": [
-								"bim360",
-								"relationship",
-								"v2",
-								"containers",
-								"{{project_id_without_b}}",
-								"relationships:search"
-							],
-							"query": [
+							"variable": [
 								{
-									"key": "domain",
-									"value": "autodesk-bim360-issue"
-								},
-								{
-									"key": "type",
-									"value": "issue"
-								},
-								{
-									"key": "id",
-									"value": "{{one_issue_id}}"
-								},
-								{
-									"key": "withDomain",
-									"value": "autodesk-construction-photo"
-								},
-								{
-									"key": "withType",
-									"value": "photo"
+									"key": "projectId",
+									"value": "{{project_id_without_b}}"
 								}
 							]
 						}
@@ -1595,7 +1651,7 @@
 					"response": []
 				},
 				{
-					"name": "Supported Relationships to Create",
+					"name": "04-Supported Relationships to Create",
 					"event": [
 						{
 							"listen": "test",
