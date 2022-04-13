@@ -2,14 +2,14 @@
 
 [![Postman](https://img.shields.io/badge/Postman-v8.11-orange.svg)](https://www.getpostman.com/)
 
-[![Issue API of Autodesk Construction Cloud](https://img.shields.io/badge/acc%20issue%20api-v2-yellowgreen)](https://forge.autodesk.com/en/docs/acc/v1/overview/field-guide/issues/)
+[![Issue API of Autodesk Construction Cloud](https://img.shields.io/badge/acc%20issue%20api-v1-yellowgreen)](https://forge.autodesk.com/en/docs/acc/v1/overview/field-guide/issues/)
 
 ![Beginner](https://img.shields.io/badge/Level-Beginner-green.svg)
 [![License](https://img.shields.io/:license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
 ## Description
 
-This repository provides a postman collection that demos endpoints of Issue API of [Issue API of Autodesk Construction Cloud](https://forge.autodesk.com/en/docs/acc/v1/overview/field-guide/issues/) on Forge developer portal.  
+This repository provides a postman collection that demos endpoints of [Issue API of Autodesk Construction Cloud](https://forge.autodesk.com/en/docs/acc/v1/overview/field-guide/issues/) on Forge developer portal.  
 
 The API supports **3 legged token** only.
 
@@ -28,34 +28,32 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
     ```https://www.getpostman.com/oauth2/callback```
 
-   <p align="center"><img src="./help/api-type.png" width="300" ></p>   
+   <p align="center"><img src="./help/api-type.png" width="400" ></p>   
 
 2. **ACC Account and project**: must be Account Admin to add the app integration. [Learn about provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps). Make a note with the __account name__
 
-3. Get Autodesk Docs project id (without b.) by API , or copy from browser URL bar of Docs UI. 
+3. Follow the [product help document](https://construction.autodesk.com/tools/issues-software/) of ACC to create some issues.
 
-4. Follow the [product help document](https://construction.autodesk.com/tools/issues-software/) of ACC to create some issues.
+4. Create some custom attributes definitions with all types: text, dropdown, numeric and paragraph. This is to test creating/patching issue with custom attributes.
 
-5. Create some custom attributes definitions with all types: text, dropdown, numeric and paragraph. This is to test creating/patching issue with custom attributes.
+   <p align="center"><img src="./help/custom-attribute.png" width="400" ></p>   
 
-   <p align="center"><img src="./help/custom-attribute.png" width="300" ></p>   
+5. Upload some photos in Photo module. This is to test creating reference with Photo.
 
-6. Upload some photos in Photo module. This is to test creating reference with Photo.
-
-   <p align="center"><img src="./help/photos.png" width="300" ></p>   
+   <p align="center"><img src="./help/photos.png" width="500" ></p>   
 
 
-7.  Clone this repository or download it. It's recommended to install [GitHub Desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
+6.  Clone this repository or download it. It's recommended to install [GitHub Desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
 
     ```git clone https://github.com/Autodesk-Forge/forge-autodesk.docs.issue.api-postman.collection```
 
-6. Import the collection and environment files to Postman
+7. Import the collection and environment files to Postman
 
-7. In environment, input _client id_, _client secret_, _account name_, _project name_ and _one user email as assignee_
+8. In environment, input _client id_, _client secret_, _account name_, _project name_ and _one user email as assignee_
 
    <p align="center"><img src="./help/apiref-env.png" width="600" ></p>  
 
-8. In context menu of collection >> **Edit**, switch to the tab **Authorization**. Click **Get New Access Token**, input the variables as below:
+9. In context menu of collection >> **Edit**, switch to the tab **Authorization**. Click **Get New Access Token**, input the variables as below:
 
    - Grant Type ``Authorization Code``
    - Callback URL  ``https://www.getpostman.com/oauth2/callback``
@@ -69,7 +67,7 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
    <p align="center"><img src="./help/apiref-oauth2.png" width="600" ></p> 
  
- 9. Click **Get New Access Token**, it will direct to login Autodesk user account, after it succeeds, the token will be generated. Click **Use Token**.  
+ 10. Click **Get New Access Token**, it will direct to login Autodesk user account, after it succeeds, the token will be generated. Click **Use Token**.  
    
 Issue API requires to work with 3-legged token. This collection takes **[Inheriting auth](https://learning.getpostman.com/docs/postman/sending-api-requests/authorization/#inheriting-auth)** to apply 3-legged token to every endpoint in the collection automatically, which means it does not need to input the token in the header explicitly.
 
