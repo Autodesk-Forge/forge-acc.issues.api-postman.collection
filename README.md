@@ -1,4 +1,4 @@
-# Postman Collection for Issue API of Autodesk Construction Cloud(ACC)
+# Postman Collection for ACC Issues API 
 
 [![Postman](https://img.shields.io/badge/Postman-v8.11-orange.svg)](https://www.getpostman.com/)
 
@@ -9,9 +9,11 @@
 
 ## Description
 
-This repository provides a postman collection that demos endpoints of [Issue API of Autodesk Construction Cloud](https://forge.autodesk.com/en/docs/acc/v1/overview/field-guide/issues/) on Forge developer portal.  
+This repository provides a postman collection that demonstrates the usage of [Issues API for Autodesk Construction Cloud](https://forge.autodesk.com/en/docs/acc/v1/overview/field-guide/issues/)(ACC) .  
 
 The API supports **3 legged token** only.
+
+As of April 15th, 2022, ACC Issues API is **preview beta**. 
 
 ## What's Postman?
 
@@ -38,7 +40,7 @@ Postman is a popular tool that provides an easy-to-use interface to send HTTP re
 
    <p align="center"><img src="./help/custom-attribute.png" width="400" ></p>   
 
-5. Upload some photos in Photo module. This is to test creating reference with Photo.
+5. (Optional) Upload a couple of photos in Photo module. This is to test creating reference with Photo.
 
    <p align="center"><img src="./help/photos.png" width="500" ></p>   
 
@@ -75,16 +77,16 @@ Issue API requires to work with 3-legged token. This collection takes **[Inherit
 
 1. Assume the steps of **Setup** have been performed and the access token is ready.
 
-2. Run the scripts in **Run First**. It will get account(hub) id, project id and one user id (for assignee when creating a new issue). Because the API to get project users of ACC has not been exposed, the demo workarounds by calling [GET:Account Users](https://forge.autodesk.com/en/docs/acc/v1/reference/http/users-GET/). This endpoint requires 2-legged token, so run _03-[backup]Authentication 2-legged token_ before running _03-[Workaround-2LO] Get One Account User Id_. 
+2. Run the scripts in **Run First**. It will get account(hub) id, project id and one user id (for assignee when creating a new issue). Because the API to get project users of ACC has not been exposed, we workaround by calling [GET:Account Users](https://forge.autodesk.com/en/docs/acc/v1/reference/http/users-GET/). This endpoint requires 2-legged token, so run _03-[backup]Authentication 2-legged token_ before running _03-[Workaround-2LO] Get One Account User Id_. 
 
    Next call _04-GET One Location_ to get one location id (for testing issue creation)
 
 
-3. Run the endpoints in **API References**. Follow [API documents](https://forge.autodesk.com/en/docs/acc/v1/reference/http/issues-users-me-GET/) to verify if the APIs work well. Try to change the parameters in various scenarios to see how it goes. Check UI if it works well with API (such as creating/patching new issue, creating new comments etc. )
+3. Run the endpoints in **API References**. Follow [API documents](https://forge.autodesk.com/en/docs/acc/v1/reference/http/issues-users-me-GET/) to verify if the APIs work well. Try to change the parameters in various scenarios to see how it goes. Check UI if it works well with API (such as creating/patching new issue and creating new comments etc. )
     
     <p align="center"><img src="./help/collection.png" width="400" ></p>   
 
-4. To work with **Issue>>References**, [Relationship API](https://forge.autodesk.com/en/docs/acc/v1/reference/http/relationship-service-v2-search-relationships-GET/) is required. This sample Postman collection provides a few endpoints. 
+4. (Optional) In ACC, a reference is defined by Relationships API, which is a common across different modules. To work with **Issue>>References**, you can use [Relationship API](https://forge.autodesk.com/en/docs/acc/v1/reference/http/relationship-service-v2-search-relationships-GET/). This sample Postman collection includes a few sample usages. For more detail about Relationships API, please take a look [at this blog](https://forge.autodesk.com/blog/bim-360acc-relationships-api). 
 
     *  01-Get id of one photo: call [Photo API](https://forge.autodesk.com/en/docs/acc/v1/reference/http/photos-getfilteredphotos-POST/) to get one photo id
     * 02-Add Reference of Issue with Photo: add reference between one issue (from previous test scripts in #3) and one photo
